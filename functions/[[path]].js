@@ -16,5 +16,4 @@ export async function onRequest(context) {
   } catch (err) {
     return new Response("ERREUR: " + err.message, { status: 200, headers: { "Content-Type": "text/plain; charset=utf-8" } });
   }
-}  });
-        }
+}
