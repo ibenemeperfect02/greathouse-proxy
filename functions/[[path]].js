@@ -4,45 +4,32 @@ export async function onRequest(context) {
   const incomingUrl = new URL(context.request.url);
   const targetUrl = new URL(GAS_BASE_URL);
 
-  // Copie tous les parametres de query (?page=admin, ?page=produit&id=..., etc.)
-  incomingUrl.searchParams.forEach((value, key) => {
+  incomingUrl.searchParams.forEach(function(value, key) {
     targetUrl.searchParams.set(key, value);
   });
 
-  // Prepare la requete vers GAS en gardant la meme methode (GET/POST)
-  // et le meme corps si c'est un POST (ex: soumission de commande, google.script.run)
-  const init = {
-    method: context.request.method,
-    headers: {
-      "Content-Type": context.request.headers.get("Content-Type") || "text/plain"
-    },
-    redirect: "follow"
-  };
-
-  if (context.request.method === "POST") {
-    init.body = await context.request.text();
-  }
-
   let response;
   try {
-    response = await fetch(targetUrl.toString(), init);
+    if (context.request.method === "POST") {
+      const bodyText = await context.request.text();
+      response = await fetch(targetUrl.toString(), {
+        method: "POST",
+        body: bodyText,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" }
+      });
+    } else {
+      response = await fetch(targetUrl.toString());
+    }
   } catch (err) {
-    return new Response("Erreur de connexion au site. Reessayez dans un instant.", { status: 502 });
+    return new Response("Erreur proxy: " + err.message, { status: 502 });
   }
 
-  let html = await response.text();
-
-  // Remplace toute reference visible a script.google.com ou googleusercontent.com
-  // dans le HTML/JS retourne, pour qu'aucun lien interne ne redirige vers Google
-  const proxyOrigin = incomingUrl.origin;
-  html = html.split("https://script.google.com/macros/s").join(proxyOrigin);
+  const html = await response.text();
 
   return new Response(html, {
     status: response.status,
     headers: {
-      "Content-Type": response.headers.get("Content-Type") || "text/html; charset=utf-8",
-      "X-Frame-Options": "",
-      "Cache-Control": "no-store"
+      "Content-Type": "text/html; charset=utf-8"
     }
   });
-                                    }
+          }
