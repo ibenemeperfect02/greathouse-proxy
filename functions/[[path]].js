@@ -1,15 +1,27 @@
 export async function onRequest(context) {
   const GAS_BASE_URL = "https://script.google.com/macros/s/AKfycbwn7aIEEfG-sS-0dEgkGB1blmG9Kf7SAET-CGEnl2g3CkcDEmpZob3Jdm8fj0iJBatS/exec";
 
-  try {
-    const response = await fetch(GAS_BASE_URL);
-    const html = await response.text();
+  const incomingUrl = new URL(context.request.url);
+  const targetUrl = new URL(GAS_BASE_URL);
+  incomingUrl.searchParams.forEach(function(value, key) {
+    targetUrl.searchParams.set(key, value);
+  });
 
-    return new Response(
-      "STATUS: " + response.status + "\nLENGTH: " + html.length + "\n\nCONTENU:\n" + html.slice(0, 500),
-      { status: 200, headers: { "Content-Type": "text/plain; charset=utf-8" } }
-    );
-  } catch (err) {
-    return new Response("ERREUR FETCH: " + err.message, { status: 200, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  let response;
+  if (context.request.method === "POST") {
+    response = await fetch(targetUrl.toString(), {
+      method: "POST",
+      body: context.request.body,
+      headers: { "Content-Type": context.request.headers.get("Content-Type") || "application/x-www-form-urlencoded" }
+    });
+  } else {
+    response = await fetch(targetUrl.toString());
   }
-}
+
+  return new Response(response.body, {
+    status: response.status,
+    headers: {
+      "Content-Type": response.headers.get("Content-Type") || "text/html; charset=utf-8"
+    }
+  });
+  }
