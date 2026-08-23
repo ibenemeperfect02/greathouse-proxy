@@ -7,21 +7,32 @@ export async function onRequest(context) {
     targetUrl.searchParams.set(key, value);
   });
 
+  const commonHeaders = {
+    "User-Agent": "Mozilla/5.0 (Linux; Android 13; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Mobile Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "fr-FR,fr;q=0.9"
+  };
+
   let response;
   if (context.request.method === "POST") {
+    const bodyText = await context.request.text();
     response = await fetch(targetUrl.toString(), {
       method: "POST",
-      body: context.request.body,
-      headers: { "Content-Type": context.request.headers.get("Content-Type") || "application/x-www-form-urlencoded" }
+      body: bodyText,
+      headers: Object.assign({}, commonHeaders, {
+        "Content-Type": context.request.headers.get("Content-Type") || "application/x-www-form-urlencoded"
+      })
     });
   } else {
-    response = await fetch(targetUrl.toString());
+    response = await fetch(targetUrl.toString(), { headers: commonHeaders });
   }
 
-  return new Response(response.body, {
+  const html = await response.text();
+
+  return new Response(html, {
     status: response.status,
     headers: {
-      "Content-Type": response.headers.get("Content-Type") || "text/html; charset=utf-8"
+      "Content-Type": "text/html; charset=utf-8"
     }
   });
-  }
+        }
