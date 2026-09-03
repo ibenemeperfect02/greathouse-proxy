@@ -1,0 +1,2563 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Great House</title>
+
+<!-- ============================================ -->
+<!-- PIXEL FACEBOOK - navigateur -->
+<!-- ============================================ -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1106225090403818');
+fbq('track', 'PageView');
+</script>
+
+<style>
+  :root {
+    --bg: #ffffff;
+    --fg: #000000;
+    --fg-soft: rgba(0,0,0,0.81);
+    --border: #dfdfdf;
+    --border-soft: #e6e6e6;
+    --btn-bg: #000000;
+    --btn-text: #ffffff;
+    --btn-hover: #333333;
+    --price-barre: #999999;
+    --price-promo: #000000;
+    --promo-red: #d0021b;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--fg-soft);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ============================================ */
+  /* BANNIERE PROMO */
+  /* ============================================ */
+  .promo-bar {
+    background: var(--promo-red);
+    color: #fff;
+    text-align: center;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 8px 12px;
+    letter-spacing: 0.2px;
+  }
+
+  /* ============================================ */
+  /* HEADER ENRICHI */
+  /* ============================================ */
+  .site-header {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    z-index: 100;
+  }
+  .site-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .site-header-icon-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .site-header-icon-btn svg { width: 22px; height: 22px; }
+  .site-header-left, .site-header-right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+  }
+  .site-header-right { justify-content: flex-end; }
+  .site-header-logo {
+    flex: 0 0 auto;
+    text-align: center;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: var(--fg);
+    text-transform: uppercase;
+  }
+  .site-header-logo-sub {
+    display: block;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #999;
+    text-transform: uppercase;
+    margin-bottom: 1px;
+  }
+  .cart-badge {
+    position: relative;
+  }
+  .cart-badge-count {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: var(--fg);
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ============================================ */
+  /* MENU LATERAL (drawer) */
+  /* ============================================ */
+  .site-drawer-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9998;
+  }
+  .site-drawer-overlay.active { display: block; }
+  .site-drawer {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 78%;
+    max-width: 320px;
+    background: #fff;
+    z-index: 9999;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    overflow-y: auto;
+    padding: 18px 0;
+  }
+  .site-drawer.active { transform: translateX(0); }
+  .site-drawer-close {
+    padding: 0 18px 14px;
+    text-align: right;
+  }
+  .site-drawer-link {
+    display: block;
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--fg);
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  /* ============================================ */
+  /* RECHERCHE */
+  /* ============================================ */
+  .site-search-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: #fff;
+    z-index: 9999;
+    padding: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .site-search-overlay.active { display: flex; gap: 10px; align-items: center; }
+  .site-search-input {
+    flex: 1;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 15px;
+  }
+  .site-search-cancel {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+  }
+
+  /* GRID PRODUITS */
+  .catalogue-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px 12px 60px;
+  }
+
+  .produits-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  @media (min-width: 640px) {
+    .produits-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (min-width: 960px) {
+    .produits-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  /* SQUELETTE DE CHARGEMENT - affiche pendant que le catalogue charge */
+  .skeleton-card {
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 3 / 4;
+    background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.3s ease-in-out infinite;
+  }
+  @keyframes skeleton-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .produit-card {
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #fff;
+    transition: box-shadow 0.2s;
+  }
+  .produit-card:active {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+  .produit-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    background: #fafafa;
+  }
+  .produit-card-info {
+    padding: 10px 10px 14px;
+  }
+  .produit-card-nom {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fg);
+    line-height: 1.35;
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .produit-card-rating {
+    font-size: 10px;
+    color: #f5a623;
+    margin-bottom: 4px;
+  }
+  .produit-card-prix {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .prix-promo {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--price-promo);
+  }
+  .prix-barre {
+    font-size: 12px;
+    color: var(--price-barre);
+    text-decoration: line-through;
+  }
+
+  /* FICHE PRODUIT (vue detail) */
+  .fiche-produit {
+    display: none;
+  }
+  .fiche-produit.active {
+    display: block;
+  }
+  .catalogue-vue.active {
+    display: block;
+  }
+  .catalogue-vue {
+    display: none;
+  }
+
+  /* ============================================ */
+  /* GALERIE PHOTO MULTI-IMAGES */
+  /* ============================================ */
+  .fiche-galerie {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .fiche-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+    background: #fafafa;
+  }
+  .fiche-miniatures {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .fiche-miniature {
+    width: 56px;
+    height: 56px;
+    flex: 0 0 auto;
+    border-radius: 8px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    opacity: 0.7;
+  }
+  .fiche-miniature.selected {
+    border-color: var(--fg);
+    opacity: 1;
+  }
+
+  .fiche-content {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 18px 4px 40px;
+  }
+
+  .fiche-nom {
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--fg);
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .fiche-prix-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .fiche-prix-promo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--price-promo);
+  }
+  .fiche-prix-barre {
+    font-size: 15px;
+    color: var(--price-barre);
+    text-decoration: line-through;
+  }
+
+  .fiche-promo-note {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #1a8a1a;
+    background: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-bottom: 12px;
+    display: inline-block;
+  }
+
+  .fiche-description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--fg-soft);
+    margin-bottom: 40px;
+  }
+  .fiche-description h1, .fiche-description h2, .fiche-description h3 {
+    color: var(--fg);
+    line-height: 1.4;
+    margin: 22px 0 10px;
+  }
+  .fiche-description h1 { font-size: 19px; }
+  .fiche-description h2 { font-size: 17px; }
+  .fiche-description h3 { font-size: 15px; }
+  .fiche-description p { margin: 0 0 12px; }
+  .fiche-description ul { margin: 0 0 14px; padding-left: 20px; }
+  .fiche-description li { margin-bottom: 6px; }
+  .fiche-description img {
+    max-width: 100%;
+    border-radius: 10px;
+    display: block;
+    margin: 14px auto;
+  }
+  .fiche-description strong { color: var(--fg); }
+  .fiche-description table { width: 100%; border-collapse: collapse; margin: 14px 0; }
+  .fiche-description td, .fiche-description th { padding: 8px; border: 1px solid var(--border-soft); font-size: 13px; }
+
+  /* BADGE NOTE ETOILES */
+  .fiche-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #f5a623;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .fiche-rating .rating-num {
+    color: var(--fg-soft);
+    font-weight: 600;
+  }
+  .fiche-partager-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    color: #999;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+  }
+  .fiche-partager-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* BANDEAU DE CONFIANCE - defilement continu en boucle, avec pause
+     sur l'item "Temoignages en bas" pour attirer l'attention. Le
+     defilement et la pause sont pilotes en JS (voir initTrustTicker)
+     pour caler precisement la pause sur la position reelle de l'item
+     special, quelle que soit la largeur du texte selon l'ecran. */
+  .trust-ticker {
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 18px 0 8px;
+    border-top: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border-soft);
+    padding: 10px 0;
+  }
+  .trust-ticker-track {
+    display: inline-flex;
+    align-items: center;
+    will-change: transform;
+  }
+  .trust-ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fg-soft);
+    padding: 0 22px;
+    white-space: nowrap;
+  }
+  .trust-ticker-emoji {
+    font-size: 18px;
+    line-height: 1;
+  }
+  .trust-ticker-item-special {
+    color: var(--promo-red);
+    animation: trust-ticker-blink 0.8s ease-in-out infinite;
+  }
+  @keyframes trust-ticker-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  /* ============================================ */
+  /* TEMOIGNAGES CLIENTS - defilement continu droite vers gauche */
+  /* ============================================ */
+  .temoignages-ticker-section {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 8px 4px 30px;
+  }
+  .temoignages-titre {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--fg);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .temoignages-ticker {
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 4px 0;
+  }
+  .temoignages-ticker-track {
+    display: inline-flex;
+    align-items: stretch;
+    animation: temoignages-ticker-scroll 28s linear infinite;
+  }
+  .temoignages-ticker:hover .temoignages-ticker-track {
+    animation-play-state: paused;
+  }
+  @keyframes temoignages-ticker-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .temoin-ticker-card {
+    display: inline-flex;
+    flex-direction: column;
+    width: 220px;
+    flex-shrink: 0;
+    white-space: normal;
+    background: #fafafa;
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    padding: 14px;
+    margin-right: 12px;
+    vertical-align: top;
+  }
+  .temoin-ticker-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .temoin-ticker-photo {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #e0e0e0;
+    flex-shrink: 0;
+  }
+  .temoin-ticker-nom {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--fg);
+  }
+  .temoin-ticker-stars {
+    font-size: 10px;
+    color: #f5a623;
+  }
+  .temoin-ticker-texte {
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--fg-soft);
+  }
+
+  /* BARRE STICKY BOUTON COMMANDER */
+  .sticky-cta {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid var(--border-soft);
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    z-index: 500;
+    display: none;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+  }
+  .sticky-cta.visible { display: block; }
+  .sticky-cta-inner {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .sticky-cta-price {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--fg);
+    white-space: nowrap;
+  }
+  .sticky-cta-btn {
+    flex: 1;
+    padding: 13px;
+    background: #000;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    cursor: pointer;
+  }
+
+  /* ============================================ */
+  /* PRODUITS SIMILAIRES */
+  /* ============================================ */
+  .similaires-section {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 8px 4px 30px;
+  }
+  .similaires-titre {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--fg);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 14px;
+  }
+  .similaires-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+  .similaire-card {
+    flex: 0 0 150px;
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #fff;
+  }
+  .similaire-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+    background: #fafafa;
+  }
+  .similaire-card-info { padding: 8px 9px 12px; }
+  .similaire-card-nom {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--fg);
+    line-height: 1.3;
+    margin-bottom: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .similaire-card-prix { font-size: 13px; font-weight: 700; color: var(--fg); }
+
+  /* ============================================ */
+  /* FAQ ACCORDEON */
+  /* ============================================ */
+  .faq-section {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 8px 4px 30px;
+  }
+  .faq-titre {
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--fg);
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .faq-item {
+    border: 1px solid var(--border-soft);
+    border-radius: 10px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--fg);
+    cursor: pointer;
+    background: #fff;
+  }
+  .faq-item.open .faq-question { background: #f7f7f7; }
+  .faq-chevron { transition: transform 0.2s; flex-shrink: 0; margin-left: 10px; }
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+  .faq-reponse {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s ease;
+    background: #fafafa;
+  }
+  .faq-item.open .faq-reponse { max-height: 300px; }
+  .faq-reponse-inner {
+    padding: 4px 16px 16px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--fg-soft);
+  }
+
+  /* ============================================ */
+  /* FOOTER */
+  /* ============================================ */
+  .site-footer {
+    background: #000;
+    color: #eaeaea;
+    padding: 34px 18px calc(34px + env(safe-area-inset-bottom));
+    margin-top: 20px;
+  }
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .footer-block { margin-bottom: 26px; }
+  .footer-block:last-child { margin-bottom: 0; }
+  .footer-block-titre {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .footer-text {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #bdbdbd;
+  }
+  .footer-link {
+    display: block;
+    font-size: 13.5px;
+    color: #d8d8d8;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .footer-hr {
+    border: none;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    margin: 22px 0;
+  }
+  .footer-brand {
+    font-size: 18px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .footer-copy {
+    font-size: 11.5px;
+    color: #888;
+    margin-top: 18px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================ -->
+<!-- BANNIERE PROMO -->
+<!-- ============================================ -->
+<div class="promo-bar" id="promo-bar">🔥 Offre limitée aujourd'hui — Livraison gratuite sur tout le site !</div>
+
+<!-- ============================================ -->
+<!-- HEADER ENRICHI -->
+<!-- ============================================ -->
+<div class="site-header">
+  <div class="site-header-row">
+    <div class="site-header-left">
+      <button class="site-header-icon-btn" type="button" onclick="ouvrirMenu()" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <button class="site-header-icon-btn" type="button" onclick="ouvrirRecherche()" aria-label="Recherche">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
+    </div>
+
+    <div class="site-header-logo" onclick="retourCatalogue()">
+      <img src="https://drive.google.com/thumbnail?id=1CnuZgGPH8ddij7pR486PeyCUCzOB-JYf&sz=w400" alt="Great House" style="max-height:34px;display:block;" onerror="this.style.display='none'; this.parentNode.innerHTML='Great House';">
+    </div>
+
+    <div class="site-header-right">      <button class="site-header-icon-btn" type="button" aria-label="Compte">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      </button>
+      <button class="site-header-icon-btn cart-badge" type="button" aria-label="Panier">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+        <span class="cart-badge-count" id="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- BARRE DE RECHERCHE -->
+<div class="site-search-overlay" id="site-search-overlay">
+  <input class="site-search-input" id="site-search-input" type="text" placeholder="Rechercher un produit..." oninput="filtrerRecherche(this.value)">
+  <button class="site-search-cancel" type="button" onclick="fermerRecherche()">Annuler</button>
+</div>
+
+<!-- MENU LATERAL -->
+<div class="site-drawer-overlay" id="site-drawer-overlay" onclick="fermerMenu()"></div>
+<div class="site-drawer" id="site-drawer">
+  <div class="site-drawer-close">
+    <button class="site-header-icon-btn" type="button" onclick="fermerMenu()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <a class="site-drawer-link" onclick="retourCatalogue(); fermerMenu();">Tous les produits</a>
+  <a class="site-drawer-link" href="#footer-contact" onclick="fermerMenu()">Contactez-nous</a>
+  <a class="site-drawer-link" href="#footer-apropos" onclick="fermerMenu()">À propos de nous</a>
+  <a class="site-drawer-link" href="#footer-suivi" onclick="fermerMenu()">Suivre ma commande</a>
+</div>
+
+<!-- ============================================ -->
+<!-- VUE CATALOGUE (liste produits) -->
+<!-- ============================================ -->
+<div class="catalogue-vue active" id="vue-catalogue">
+  <div class="catalogue-container">
+    <div class="produits-grid" id="produits-grid">
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- VUE FICHE PRODUIT (detail + achat) -->
+<!-- ============================================ -->
+<div class="catalogue-vue" id="vue-fiche">
+  <div class="catalogue-container">
+
+    <div class="fiche-galerie">
+      <img class="fiche-image" id="fiche-image" src="" alt="">
+      <div class="fiche-miniatures" id="fiche-miniatures"></div>
+    </div>
+
+    <div class="fiche-content">
+      <div class="fiche-rating">&#x2B50;&#xFE0F;&#x2B50;&#xFE0F;&#x2B50;&#xFE0F;&#x2B50;&#xFE0F;&#x2B50;&#xFE0F; <span class="rating-num">4.9/5 · Vu et approuvé par nos clients</span></div>
+      <div class="fiche-nom" id="fiche-nom"></div>
+      <div class="fiche-prix-row">
+        <span class="fiche-prix-promo" id="fiche-prix-promo"></span>
+        <span class="fiche-prix-barre" id="fiche-prix-barre"></span>
+        <button class="fiche-partager-btn" type="button" onclick="partagerProduit()" aria-label="Partager ce produit">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+        </button>
+      </div>
+      <div class="fiche-promo-note" id="fiche-promo-note" style="display:none">&#x1F389; Réduction groupe WhatsApp appliquée : -1000 FCFA</div>
+
+      <!-- WIDGET VISITEURS + STOCK EN DIRECT -->
+      <div id="live-stats-container"></div>
+
+      <!-- COMPTE A REBOURS -->
+      <div id="countdown-container"></div>
+
+      <!-- BOUTON COMMANDER (ouvre modal COD) -->
+      <button class="cod-open-btn cod-vibrate" id="cod-open-btn" type="button" onclick="ouvrirModalCOD()">
+        Commander Maintenant
+      </button>
+
+      <!-- BANDEAU DE CONFIANCE - defilement continu, avec pause sur l'item temoignages -->
+      <div class="trust-ticker">
+        <div class="trust-ticker-track">
+          <span class="trust-ticker-item"><span class="trust-ticker-emoji">&#x1F381;</span>Livraison gratuite</span>
+          <span class="trust-ticker-item"><span class="trust-ticker-emoji">&#x1F91D;</span>Paiement a la livraison</span>
+          <span class="trust-ticker-item trust-ticker-item-special"><span class="trust-ticker-emoji">&#x2B07;&#xFE0F;</span>Temoignages clients en bas</span>
+          <span class="trust-ticker-item"><span class="trust-ticker-emoji">&#x2705;</span>Qualite garantie</span>
+          <span class="trust-ticker-item"><span class="trust-ticker-emoji">&#x1F381;</span>Livraison gratuite</span>
+          <span class="trust-ticker-item"><span class="trust-ticker-emoji">&#x1F91D;</span>Paiement a la livraison</span>
+          <span class="trust-ticker-item trust-ticker-item-special"><span class="trust-ticker-emoji">&#x2B07;&#xFE0F;</span>Temoignages clients en bas</span>
+          <span class="trust-ticker-item"><span class="trust-ticker-emoji">&#x2705;</span>Qualite garantie</span>
+        </div>
+      </div>
+
+      <div class="fiche-description" id="fiche-description"></div>
+    </div>
+
+    <!-- TEMOIGNAGES CLIENTS - defilement continu droite vers gauche -->
+    <div class="temoignages-ticker-section" id="temoignages-section" style="display:none">
+      <div class="temoignages-titre">TEMOIGNAGES CLIENTS</div>
+      <div class="temoignages-ticker">
+        <div class="temoignages-ticker-track" id="temoignages-track"></div>
+      </div>
+    </div>
+
+    <!-- PRODUITS SIMILAIRES -->
+    <div class="similaires-section" id="similaires-section" style="display:none">
+      <div class="similaires-titre">Vous pourriez aussi aimer</div>
+      <div class="similaires-scroll" id="similaires-scroll"></div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-section">
+      <div class="faq-titre">FOIRE AUX QUESTIONS</div>
+      <div id="faq-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BARRE STICKY BAS DE PAGE (visible en scrollant sur la fiche produit) -->
+<div class="sticky-cta" id="sticky-cta">
+  <div class="sticky-cta-inner">
+    <span class="sticky-cta-price" id="sticky-cta-price"></span>
+    <button class="sticky-cta-btn" type="button" onclick="ouvrirModalCOD()">Commander</button>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- MODAL FORMULAIRE COD -->
+<!-- ============================================ -->
+<div class="cod-overlay" id="cod-modal" style="display:none" onclick="if(event.target===this)fermerModalCOD()">
+  <div class="cod-modal">
+    <button class="cod-close-btn" type="button" onclick="fermerModalCOD()">&#x2715;</button>
+
+    <!-- ECRAN PROMO WHATSAPP - affiche avant le formulaire si la reduction n'est pas encore active -->
+    <div id="cod-promo-screen" style="display:none">
+      <div class="cod-promo-emoji">&#x1F389;</div>
+      <h2 class="cod-modal-title">Rejoignez le groupe WhatsApp de notre Maman pour la soutenir et recevez 1000 FCFA de réduction !</h2>
+      <button class="cod-promo-btn" type="button" onclick="rejoindreGroupeWhatsapp()">
+        &#x1F4AC; Rejoindre le groupe WhatsApp
+      </button>
+      <button class="cod-promo-skip" type="button" onclick="continuerSansPromo()">
+        Continuer sans réduction
+      </button>
+    </div>
+
+    <!-- FORMULAIRE DE COMMANDE -->
+    <div id="cod-form-screen" style="display:none">
+      <h2 class="cod-modal-title">Veuillez renseigner les informations ci-dessous</h2>
+
+      <div class="cod-free-shipping">&#127873; LIVRAISON GRATUITE &#127873;</div>
+
+      <div class="cod-promo-bandeau" id="cod-promo-bandeau" style="display:none">&#x1F389; Réduction groupe WhatsApp appliquée : -1000 FCFA</div>
+
+      <div class="cod-section-title">Votre choix</div>
+      <div class="cod-variants" id="cod-variants">
+        <!-- rempli par JS selon variantes du produit -->
+      </div>
+
+      <div class="cod-section-title">Vos informations</div>
+
+      <div class="cod-form">
+        <div class="cod-field">
+          <label class="cod-label">Nom et Prenom <span class="cod-required">*</span></label>
+          <input class="cod-input" type="text" id="cod-nom" placeholder="Ex: Kone Amadou" required>
+        </div>
+
+        <div class="cod-field">
+          <label class="cod-label">Ville <span class="cod-required">*</span></label>
+          <input class="cod-input" type="text" id="cod-ville" placeholder="Ex: Abidjan" required>
+        </div>
+
+        <div class="cod-field">
+          <label class="cod-label">Adresse de livraison a preciser <span class="cod-required">*</span></label>
+          <input class="cod-input" type="text" id="cod-adresse" placeholder="Ex: Cocody, Riviera 2, pres de la pharmacie" required>
+        </div>
+
+        <div class="cod-field">
+          <label class="cod-label">Numero de telephone 1 <span class="cod-required">*</span></label>
+          <input class="cod-input" type="tel" id="cod-tel1" placeholder="Ex: +225 07 00 00 00 00" required>
+        </div>
+
+        <div class="cod-field">
+          <label class="cod-label">Numero de telephone 2</label>
+          <input class="cod-input" type="tel" id="cod-tel2" placeholder="Ex: +225 05 00 00 00 00">
+        </div>
+
+        <div class="cod-summary" id="cod-summary">
+          <div class="cod-summary-title">Resume de la commande</div>
+          <div class="cod-summary-product"><span id="cod-summary-name"></span></div>
+          <div class="cod-summary-price">Total : <strong id="cod-summary-total"></strong></div>
+        </div>
+
+        <div class="cod-field">
+          <label class="cod-label">Note <span class="cod-optional">(facultatif)</span></label>
+          <textarea class="cod-input cod-textarea" id="cod-note" placeholder="Instructions speciales, point de repere..."></textarea>
+        </div>
+
+        <div class="cod-warning">
+          &#9888;&#65039; Attention : Assurez-vous de vraiment vouloir le produit et de repondre aux appels du livreur pendant la livraison S'IL VOUS PLAIT
+        </div>
+
+        <div class="cod-status" id="cod-status" style="display:none"></div>
+
+        <button class="cod-submit-btn" type="button" id="cod-submit-btn" onclick="codSubmitOrder()">
+          Commandez maintenant
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- FOOTER -->
+<!-- ============================================ -->
+<div class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-block" id="footer-contact">
+      <div class="footer-block-titre">Besoin d'aide ?</div>
+      <div class="footer-text">
+        Notre équipe de service client est disponible 7 jours sur 7 pour répondre à toutes vos questions.
+        Les messages sont traités dans les meilleurs délais.<br><br>
+        <strong>Heures d'ouverture</strong><br>
+        Lundi à dimanche : 09:00 - 20:00<br><br>
+        <strong>Contact</strong><br>
+        WhatsApp / Téléphone disponible sur demande
+      </div>
+    </div>
+
+    <hr class="footer-hr">
+
+    <div class="footer-block" id="footer-apropos">
+      <div class="footer-block-titre">À propos de nous</div>
+      <div class="footer-text">
+        Great House propose une sélection de produits de qualité, livrés directement chez vous
+        avec paiement à la livraison. Commandez en toute confiance.
+      </div>
+    </div>
+
+    <hr class="footer-hr">
+
+    <div class="footer-block" id="footer-suivi">
+      <div class="footer-block-titre">Informations</div>
+      <a class="footer-link" href="#footer-apropos">À propos de nous</a>
+      <a class="footer-link" href="#">Commande et livraison</a>
+      <a class="footer-link" href="#">Politique de retour et de remboursement</a>
+      <a class="footer-link" href="#">Politique d'annulation avant expédition</a>
+      <a class="footer-link" href="#">Politique de confidentialité</a>
+      <a class="footer-link" href="#">Conditions générales</a>
+      <a class="footer-link" href="#">Suivre ma commande</a>
+    </div>
+
+    <hr class="footer-hr">
+
+    <div class="footer-block">
+      <div class="footer-brand">Great House</div>
+      <div class="footer-text">Paiement à la livraison · Livraison gratuite · Satisfait ou remboursé</div>
+      <div class="footer-copy">&copy; <span id="footer-year"></span> Great House. Tous droits réservés.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- STYLES COD + TIMER + STATS (JS pur, look Horizon) -->
+<!-- ============================================ -->
+<style>
+.cod-open-btn {
+  width: 100%;
+  padding: 16px 24px;
+  background: #000000;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+@keyframes cod-vibrate {
+  0%   { transform: translateX(0); }
+  10%  { transform: translateX(-3px) rotate(-1deg); }
+  20%  { transform: translateX(3px) rotate(1deg); }
+  30%  { transform: translateX(-3px) rotate(0deg); }
+  40%  { transform: translateX(3px); }
+  50%  { transform: translateX(-2px); }
+  60%  { transform: translateX(2px); }
+  70%  { transform: translateX(-1px); }
+  80%  { transform: translateX(1px); }
+  100% { transform: translateX(0); }
+}
+.cod-vibrate {
+  animation: cod-vibrate 0.8s ease-in-out infinite;
+  animation-delay: 2s;
+}
+.cod-vibrate:active {
+  animation: none;
+  transform: scale(0.98);
+}
+
+.cod-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 99999;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+@media (min-width: 768px) {
+  .cod-overlay { align-items: center; }
+}
+
+.cod-modal {
+  background: #ffffff;
+  width: 100%;
+  max-width: 520px;
+  max-height: 92vh;
+  overflow-y: auto;
+  border-radius: 16px 16px 0 0;
+  padding: 24px 20px 32px;
+  position: relative;
+  box-shadow: 0 -4px 32px rgba(0,0,0,0.2);
+}
+@media (min-width: 768px) {
+  .cod-modal { border-radius: 16px; max-height: 88vh; }
+}
+
+.cod-close-btn {
+  position: absolute;
+  top: 14px; right: 16px;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 50%;
+  width: 32px; height: 32px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333;
+}
+
+.cod-modal-title {
+  font-size: 17px;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 32px 16px 0;
+  color: #111;
+  line-height: 1.4;
+}
+
+/* ECRAN PROMO WHATSAPP */
+.cod-promo-emoji {
+  font-size: 44px;
+  text-align: center;
+  margin: 10px 0 6px;
+}
+.cod-promo-btn {
+  width: 100%;
+  padding: 16px;
+  background: #25D366;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+.cod-promo-btn:active { transform: scale(0.98); }
+.cod-promo-skip {
+  width: 100%;
+  padding: 12px;
+  background: none;
+  color: #777;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+  text-decoration: underline;
+}
+.cod-promo-bandeau {
+  background: #e8f5e9;
+  color: #1b5e20;
+  border: 1px solid #a5d6a7;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.cod-free-shipping {
+  background: #1a8a1a;
+  color: #ffffff;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  letter-spacing: 0.5px;
+}
+
+.cod-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 10px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #eee;
+}
+
+.cod-variants {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.cod-variant-option {
+  display: flex;
+  align-items: center;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.cod-variant-option input[type="radio"] {
+  margin-right: 12px;
+  accent-color: #000000;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+.cod-variant-option.selected {
+  border-color: #000000;
+  background: #fafafa;
+}
+.cod-variant-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+}
+.cod-variant-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: #000000;
+  margin-left: auto;
+}
+
+.cod-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.cod-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.cod-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+.cod-required { color: #e00000; }
+.cod-optional { color: #999; font-weight: 400; font-size: 12px; }
+.cod-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #111;
+  background: #fafafa;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+}
+.cod-input:focus {
+  outline: none;
+  border-color: #000000;
+  background: #fff;
+}
+.cod-textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.cod-summary {
+  background: #f7f7f7;
+  border-radius: 8px;
+  padding: 14px;
+  border: 1px solid #eee;
+}
+.cod-summary-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #555;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.cod-summary-product {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 4px;
+}
+.cod-summary-price {
+  font-size: 15px;
+  color: #111;
+}
+.cod-summary-price strong {
+  color: #000000;
+  font-size: 17px;
+}
+
+.cod-warning {
+  background: #fff8e1;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 13px;
+  color: #7a5000;
+  line-height: 1.5;
+}
+
+.cod-status {
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+.cod-status.success {
+  background: #e8f5e9;
+  color: #1b5e20;
+  border: 1px solid #a5d6a7;
+}
+.cod-status.error {
+  background: #ffebee;
+  color: #b71c1c;
+  border: 1px solid #ef9a9a;
+}
+.cod-status.loading {
+  background: #e3f2fd;
+  color: #0d47a1;
+  border: 1px solid #90caf9;
+}
+
+.cod-submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: #1a8a1a;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background 0.2s, transform 0.1s;
+}
+.cod-submit-btn:active { transform: scale(0.98); }
+.cod-submit-btn:disabled { background: #aaa; cursor: not-allowed; }
+
+/* COUNTDOWN TIMER */
+.countdown-box {  display: block;
+  width: 100%;
+  padding: 16px;
+  background-color: #000000;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 18px;
+  box-sizing: border-box;
+}
+.countdown-text {
+  color: #ffffff;
+  font-size: 15px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.countdown-display {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+.countdown-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 50px;
+}
+.countdown-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+.countdown-label {
+  font-size: 10px;
+  color: #ffffff;
+  margin-top: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* LIVE STATS WIDGET */
+.live-stats-wrap {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 4px 0 8px;
+}
+.live-stats-grid {
+  display: inline-grid;
+  grid-template-columns: max-content max-content;
+  gap: 4px 10px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  align-items: center;
+  justify-items: center;
+  width: auto;
+  margin: 0 auto;
+}
+.live-stats-label {
+  font-size: 12.5px;
+  color: #666;
+  text-align: right;
+  white-space: nowrap;
+}
+.live-stats-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #000000;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background-color: transparent;
+  text-align: center;
+  min-width: 40px;
+  transition: color 0.3s ease;
+}
+.live-stats-value.changing {
+  color: #d0021b;
+}
+
+/* TOAST PARTAGE - confirmation discrete apres copie du lien */
+.partage-toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: #000;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 20px;
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  white-space: nowrap;
+}
+.partage-toast.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+</style>
+
+
+<!-- ============================================ -->
+<!-- SCRIPT PRINCIPAL -->
+<!-- ============================================ -->
+<script>
+var PRODUITS = [];
+var PRODUIT_ACTUEL = null;
+var VARIANTE_SELECTIONNEE = null;
+var EVENT_ID_ACHAT = null;
+var DEEP_LINK_PRODUIT_ID = (function() {
+  var match = window.location.pathname.match(/^\/produit\/([^\/]+)/);
+  if (match) return decodeURIComponent(match[1]);
+  return new URLSearchParams(window.location.search).get("id") || "";
+})();
+
+// ============================================
+// CONFIGURATION API - tout passe par JSONP (balise <script src="...">),
+// y compris la soumission de commande. Google Apps Script Web Apps ne
+// supportent PAS CORS pour un vrai fetch() POST cross-origin : aucune
+// methode n'existe pour ajouter Access-Control-Allow-Origin sur une
+// reponse ContentService, donc meme un POST en text/plain (qui evite
+// le preflight OPTIONS) reste bloque a la LECTURE de la reponse par le
+// navigateur. JSONP contourne totalement cette limite.
+// ============================================
+var GAS_EXEC_URL = "https://script.google.com/macros/s/AKfycbwn7aIEEfG-sS-0dEgkGB1blmG9Kf7SAET-CGEnl2g3CkcDEmpZob3Jdm8fj0iJBatS/exec";
+var SCRIPT_URL = GAS_EXEC_URL;
+
+var _jsonpCounter = 0;
+function appelerApiJsonp(action, params, callback) {
+  _jsonpCounter++;
+  var callbackName = "jsonpCallback_" + _jsonpCounter;
+  var url = GAS_EXEC_URL + "?action=" + encodeURIComponent(action) + "&callback=" + callbackName;
+  for (var key in params) {
+    if (params.hasOwnProperty(key)) {
+      url += "&" + encodeURIComponent(key) + "=" + encodeURIComponent(params[key]);
+    }
+  }
+
+  window[callbackName] = function(data) {
+    callback(data);
+    delete window[callbackName];
+    script.remove();
+  };
+
+  var script = document.createElement("script");
+  script.src = url;
+  script.onerror = function() {
+    callback({ ok: false, message: "Erreur de connexion au serveur" });
+    delete window[callbackName];
+    script.remove();
+  };
+  document.body.appendChild(script);
+}
+
+function appelerApiPost(payload, callback) {
+  appelerApiJsonp("soumettreCommande", { data: JSON.stringify(payload) }, callback);
+}
+
+window.onerror = function(msg, url, line, col, error) {
+  document.body.insertAdjacentHTML('afterbegin',
+    '<div style="background:red;color:white;padding:20px;font-size:14px;word-break:break-all;position:relative;z-index:99999">ERREUR JS: ' + msg + ' (ligne ' + line + ')</div>');
+  return false;
+};
+
+// ============================================
+// LIVE VIEW - ping regulier pour signaler que ce visiteur est actif,
+// et transmettre en direct ce qu'il tape dans le formulaire de commande.
+// Inclut aussi le produit/variante/prix regarde ou selectionne, necessaire
+// cote serveur pour pouvoir creer une commande "Panier abandonne" complete
+// si le client remplit nom+tel puis n'a jamais clique "Commandez maintenant"
+// (voir sitePing / siteLiveVerifierCommandesAuto cote GAS).
+// ============================================
+var LIVE_SESSION_ID = (function() {
+  var existing = sessionStorage.getItem('live_session_id');
+  if (existing) return existing;
+  var id = 'sess_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+  sessionStorage.setItem('live_session_id', id);
+  return id;
+})();
+
+function envoyerPing() {
+  var enFormulaireEl = document.getElementById('cod-form-screen');
+  var enFormulaire = !!(enFormulaireEl && enFormulaireEl.style.display === 'block');
+
+  var nomEl = document.getElementById('cod-nom');
+  var telEl = document.getElementById('cod-tel1');
+  var villeEl = document.getElementById('cod-ville');
+  var adresseEl = document.getElementById('cod-adresse');
+
+  var produitId = PRODUIT_ACTUEL ? String(PRODUIT_ACTUEL.id) : '';
+  var produitNom = PRODUIT_ACTUEL ? PRODUIT_ACTUEL.nom : '';
+  var varianteNom = VARIANTE_SELECTIONNEE ? VARIANTE_SELECTIONNEE.nom : '';
+  var prix = VARIANTE_SELECTIONNEE ? (prixApresPromo(PRODUIT_ACTUEL.id, VARIANTE_SELECTIONNEE.prixPromo) || VARIANTE_SELECTIONNEE.prixPromo) : '';
+
+  // Sans produit ouvert (visiteur sur le catalogue general), on envoie quand
+  // meme un ping "anonyme" pour le compteur en ligne, mais sans creer de
+  // ligne exploitable pour un panier abandonne (produitId vide).
+  appelerApiJsonp('ping', {
+    sessionId: LIVE_SESSION_ID,
+    produitId: produitId,
+    enFormulaire: enFormulaire ? '1' : '0',
+    nom: (nomEl && nomEl.value) ? nomEl.value.trim() : '',
+    tel: (telEl && telEl.value) ? telEl.value.trim() : '',
+    ville: (villeEl && villeEl.value) ? villeEl.value.trim() : '',
+    adresse: (adresseEl && adresseEl.value) ? adresseEl.value.trim() : '',
+    produitNom: produitNom,
+    varianteNom: varianteNom,
+    prix: prix
+  }, function() {});
+}
+
+// ============================================
+// PARAMETRES DYNAMIQUES (boutique suspendue, promo WhatsApp, banniere)
+// Charges au demarrage via l'API au lieu d'etre injectes cote serveur.
+// Valeurs par defaut en attendant la reponse de l'API.
+// ============================================
+var BOUTIQUE_SUSPENDUE = false;
+
+// ============================================
+// REDUCTION GROUPE WHATSAPP
+// S'active quand le client clique sur "Rejoindre le groupe WhatsApp" avant
+// de commander. On ne peut pas verifier qu'il a reellement rejoint (WhatsApp
+// ne communique rien a un site externe), donc on fait confiance au clic.
+// Reglages geres depuis site_admin (Parametres), charges dynamiquement via API.
+// Persiste via localStorage (survit meme si le client revient plus tard),
+// et se consomme automatiquement des qu'une commande est validee avec succes
+// (un seul usage). Expire aussi automatiquement apres la duree configuree.
+// ============================================
+var PROMO_ACTIVE_GLOBAL = false;
+var PROMO_MONTANT = 1000;
+var PROMO_LIEN_WHATSAPP = "";
+var PROMO_DUREE_MS = 15 * 60 * 1000;
+var PROMO_STORAGE_KEY = "whatsapp_promo_expire_at";
+var PROMO_PRODUITS_ELIGIBLES_RAW = "";
+var PROMO_PRODUITS_ELIGIBLES = [];
+
+function chargerParametresPromo() {
+  appelerApiJsonp("getPromoParams", {}, function(res) {
+    if (!res || !res.ok || !res.promo) return;
+    var p = res.promo;
+    BOUTIQUE_SUSPENDUE = !!p.boutiqueSuspendue;
+    PROMO_ACTIVE_GLOBAL = !!p.promoActive;
+    PROMO_MONTANT = parseFloat(p.promoMontant) || 1000;
+    PROMO_LIEN_WHATSAPP = p.promoLien || "";
+    PROMO_DUREE_MS = (parseFloat(p.promoDureeMin) || 15) * 60 * 1000;
+    PROMO_PRODUITS_ELIGIBLES_RAW = p.promoProduits || "";
+    PROMO_PRODUITS_ELIGIBLES = PROMO_PRODUITS_ELIGIBLES_RAW ? PROMO_PRODUITS_ELIGIBLES_RAW.split(",").map(function(s) { return s.trim(); }).filter(function(s) { return s; }) : [];
+
+    if (p.banniereTexte) {
+      var banniereEl = document.getElementById("promo-bar");
+      if (banniereEl) banniereEl.textContent = p.banniereTexte;
+    }
+
+    if (BOUTIQUE_SUSPENDUE && typeof appliquerEtatSuspension === "function") {
+      appliquerEtatSuspension();
+    }
+  });
+}
+
+function produitEligiblePromo(produitId) {
+  if (!PROMO_ACTIVE_GLOBAL) return false;
+  if (PROMO_PRODUITS_ELIGIBLES.length === 0) return true;
+  return PROMO_PRODUITS_ELIGIBLES.indexOf(String(produitId)) !== -1;
+}
+
+function promoEstActive() {
+  try {
+    var expireAt = localStorage.getItem(PROMO_STORAGE_KEY);
+    if (!expireAt) return false;
+    if (Date.now() > parseInt(expireAt)) {
+      localStorage.removeItem(PROMO_STORAGE_KEY);
+      return false;
+    }
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+function activerPromoWhatsapp() {
+  try {
+    localStorage.setItem(PROMO_STORAGE_KEY, String(Date.now() + PROMO_DUREE_MS));
+  } catch (e) {}
+}
+
+function consommerPromoWhatsapp() {
+  try {
+    localStorage.removeItem(PROMO_STORAGE_KEY);
+  } catch (e) {}
+}
+
+function prixApresPromo(produitId, prix) {
+  var n = parseFloat(prix) || 0;
+  if (promoEstActive() && produitEligiblePromo(produitId)) {
+    return Math.max(0, n - PROMO_MONTANT);
+  }
+  return n;
+}
+
+// ============================================
+// FAQ CONTENU (generique COD - adapte au besoin)
+// ============================================
+var FAQ_ITEMS = [
+  { q: "Quand ma commande sera-t-elle livrée ?", r: "Votre commande est traitée sous 24h et livrée généralement entre 24h et 72h après confirmation, selon votre ville." },
+  { q: "Comment fonctionne le paiement à la livraison ?", r: "Vous ne payez rien en ligne. Vous payez en espèces directement au livreur au moment de la remise du colis." },
+  { q: "Puis-je vérifier le produit avant de payer ?", r: "Oui, vous pouvez vérifier le produit à la réception, avant de remettre le paiement au livreur." },
+  { q: "Comment vous contacter ?", r: "Notre équipe est disponible 7j/7 de 09:00 à 20:00. Contactez-nous via les informations en bas de page." },
+  { q: "Quelle est votre politique de retour ?", r: "Si le produit ne vous convient pas à la livraison, vous pouvez le refuser sans frais. Contactez-nous pour plus de détails." }
+];
+
+// ============================================
+// CHARGEMENT CATALOGUE
+// ============================================
+function chargerCatalogue() {
+  appelerApiJsonp("getProduits", {}, function(res) {
+    if (!res || !res.ok) {
+      document.getElementById('produits-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:#999">Erreur de chargement. Veuillez rafraichir la page.</div>';
+      return;
+    }
+    PRODUITS = res.produits || [];
+    afficherGrilleProduits();
+
+    // Deep link : si l'URL contient ?page=produit&id=..., on ouvre directement la fiche
+    if (DEEP_LINK_PRODUIT_ID) {
+      for (var i = 0; i < PRODUITS.length; i++) {
+        if (String(PRODUITS[i].id) === String(DEEP_LINK_PRODUIT_ID)) {
+          ouvrirFicheProduit(PRODUITS[i]);
+          break;
+        }
+      }
+    }
+  });
+}
+
+function afficherGrilleProduits(filtre) {
+  var grid = document.getElementById('produits-grid');
+  grid.innerHTML = '';
+
+  for (var i = 0; i < PRODUITS.length; i++) {
+    var p = PRODUITS[i];
+    if (!p.variantes || p.variantes.length === 0) continue;
+    if (filtre && p.nom.toLowerCase().indexOf(filtre.toLowerCase()) === -1) continue;
+
+    var v0 = p.variantes[0];
+    var card = document.createElement('div');
+    card.className = 'produit-card';
+    card.onclick = (function(prod) {
+      return function() { ouvrirFicheProduit(prod); };
+    })(p);
+
+    var prixHtml = '<span class="prix-promo">' + formatPrix(v0.prixPromo) + '</span>';
+    if (v0.prixNormal) {
+      prixHtml += '<span class="prix-barre">' + formatPrix(v0.prixNormal) + '</span>';
+    }
+
+    var imgSrc = (p.photos && p.photos.length > 0) ? p.photos[0] : p.photo;
+
+    card.innerHTML =
+      '<img src="' + imgSrc + '" alt="' + escHtml(p.nom) + '">' +
+      '<div class="produit-card-info">' +
+        '<div class="produit-card-rating">&#x2B50;&#xFE0F;&#x2B50;&#xFE0F;&#x2B50;&#xFE0F;&#x2B50;&#xFE0F;&#x2B50;&#xFE0F; 4.9</div>' +
+        '<div class="produit-card-nom">' + escHtml(p.nom) + '</div>' +
+        '<div class="produit-card-prix">' + prixHtml + '</div>' +
+      '</div>';
+
+    grid.appendChild(card);
+  }
+}
+
+function formatPrix(valeur) {
+  var n = parseFloat(valeur);
+  if (isNaN(n)) return '';
+  return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' FCFA';
+}
+
+function escHtml(texte) {
+  var d = document.createElement('div');
+  d.textContent = texte || '';
+  return d.innerHTML;
+}
+
+// ============================================
+// MENU LATERAL
+// ============================================
+function ouvrirMenu() {
+  document.getElementById('site-drawer').classList.add('active');
+  document.getElementById('site-drawer-overlay').classList.add('active');
+}
+function fermerMenu() {
+  document.getElementById('site-drawer').classList.remove('active');
+  document.getElementById('site-drawer-overlay').classList.remove('active');
+}
+
+// ============================================
+// RECHERCHE
+// ============================================
+function ouvrirRecherche() {
+  document.getElementById('site-search-overlay').classList.add('active');
+  document.getElementById('site-search-input').focus();
+}
+function fermerRecherche() {
+  document.getElementById('site-search-overlay').classList.remove('active');
+  document.getElementById('site-search-input').value = '';
+  afficherGrilleProduits();
+}
+function filtrerRecherche(valeur) {
+  if (document.getElementById('vue-fiche').classList.contains('active')) {
+    retourCatalogue();
+  }
+  afficherGrilleProduits(valeur);
+}
+
+// ============================================
+// PARTAGE PRODUIT - bouton discret sur la fiche
+// Utilise le partage natif du telephone si disponible (WhatsApp, SMS...),
+// sinon copie le lien dans le presse-papier avec une confirmation discrete.
+// ============================================
+function partagerProduit() {
+  if (!PRODUIT_ACTUEL || !SCRIPT_URL) return;
+  var lien = SCRIPT_URL + '?page=produit&id=' + encodeURIComponent(PRODUIT_ACTUEL.id);
+  var texte = PRODUIT_ACTUEL.nom + ' - ' + formatPrix(prixApresPromo(PRODUIT_ACTUEL.id, VARIANTE_SELECTIONNEE.prixPromo));
+
+  if (navigator.share) {
+    navigator.share({ title: texte, url: lien }).catch(function() {});
+    return;
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(lien).then(function() {
+      afficherToastPartage();
+    }).catch(function() {
+      promptPartageManuel(lien);
+    });
+  } else {
+    promptPartageManuel(lien);
+  }
+}
+
+function promptPartageManuel(lien) {
+  window.prompt('Copiez ce lien pour le partager :', lien);
+}
+
+function afficherToastPartage() {
+  var toast = document.createElement('div');
+  toast.className = 'partage-toast';
+  toast.textContent = 'Lien copié !';
+  document.body.appendChild(toast);
+  setTimeout(function() {
+    toast.classList.add('visible');
+  }, 10);
+  setTimeout(function() {
+    toast.classList.remove('visible');
+    setTimeout(function() { toast.remove(); }, 300);
+  }, 2000);
+}
+
+// ============================================
+// NAVIGATION VUES
+// ============================================
+function ouvrirFicheProduit(produit) {
+  PRODUIT_ACTUEL = produit;
+  VARIANTE_SELECTIONNEE = produit.variantes[0];
+
+  var photos = (produit.photos && produit.photos.length > 0) ? produit.photos : [produit.photo];
+  afficherGalerie(photos);
+
+  document.getElementById('fiche-nom').textContent = produit.nom;
+  document.getElementById('fiche-description').innerHTML = produit.description || '';
+
+  majPrixFiche();
+
+  document.getElementById('vue-catalogue').classList.remove('active');
+  document.getElementById('vue-fiche').classList.add('active');
+  window.scrollTo(0, 0);
+
+  document.getElementById('sticky-cta-price').textContent = formatPrix(VARIANTE_SELECTIONNEE.prixPromo);
+  initStickyCta();
+
+  // Pixel FB: ViewContent
+  var eventId = 'vc_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+  fbq('track', 'ViewContent', {
+    content_name: produit.nom,
+    content_ids: [produit.id],
+    content_type: 'product',
+    value: parseFloat(VARIANTE_SELECTIONNEE.prixPromo) || 0,
+    currency: 'XOF'
+  }, { eventID: eventId });
+
+  initLiveStats();
+  initCountdown();
+  afficherProduitsSimilaires(produit);
+  afficherFAQ();
+  chargerTemoignages(produit.id);
+  appliquerEtatSuspension();
+
+  // Met a jour l'URL du navigateur avec le deep link produit (sans recharger la page)
+  try {
+    var newUrl = window.location.origin + '/produit/' + encodeURIComponent(produit.id);
+    window.history.replaceState({}, '', newUrl);
+  } catch (e) {}
+}
+
+function afficherGalerie(photos) {
+  document.getElementById('fiche-image').src = photos[0];
+
+  var miniDiv = document.getElementById('fiche-miniatures');
+  miniDiv.innerHTML = '';
+
+  if (photos.length <= 1) return;
+
+  for (var i = 0; i < photos.length; i++) {
+    var mini = document.createElement('img');
+    mini.className = 'fiche-miniature' + (i === 0 ? ' selected' : '');
+    mini.src = photos[i];
+    mini.onclick = (function(idx, url) {
+      return function() {
+        document.getElementById('fiche-image').src = url;
+        document.querySelectorAll('.fiche-miniature').forEach(function(el) {
+          el.classList.remove('selected');
+        });
+        this.classList.add('selected');
+      };
+    })(i, photos[i]);
+    miniDiv.appendChild(mini);
+  }
+}
+
+function retourCatalogue() {
+  document.getElementById('vue-fiche').classList.remove('active');
+  document.getElementById('vue-catalogue').classList.add('active');
+  window.scrollTo(0, 0);
+  document.getElementById('sticky-cta').classList.remove('visible');
+  if (window._stickyScrollHandler) {
+    window.removeEventListener('scroll', window._stickyScrollHandler);
+  }
+  try {
+    window.history.replaceState({}, '', window.location.origin + '/');
+  } catch (e) {}
+}
+
+// ============================================
+// BARRE STICKY - apparait quand le bouton principal sort de l'ecran// ============================================
+function initStickyCta() {
+  var sticky = document.getElementById('sticky-cta');
+  var mainBtn = document.getElementById('cod-open-btn');
+  sticky.classList.remove('visible');
+
+  if (window._stickyScrollHandler) {
+    window.removeEventListener('scroll', window._stickyScrollHandler);
+  }
+
+  window._stickyScrollHandler = function() {
+    if (!mainBtn) return;
+    var rect = mainBtn.getBoundingClientRect();
+    if (rect.bottom < 0) {
+      sticky.classList.add('visible');
+    } else {
+      sticky.classList.remove('visible');
+    }
+  };
+
+  window.addEventListener('scroll', window._stickyScrollHandler);
+}
+
+function majPrixFiche() {
+  var prixFinal = prixApresPromo(PRODUIT_ACTUEL.id, VARIANTE_SELECTIONNEE.prixPromo);
+  document.getElementById('fiche-prix-promo').textContent = formatPrix(prixFinal);
+
+  var promoOk = promoEstActive() && produitEligiblePromo(PRODUIT_ACTUEL.id);
+
+  var barreEl = document.getElementById('fiche-prix-barre');
+  if (VARIANTE_SELECTIONNEE.prixNormal) {
+    barreEl.textContent = formatPrix(VARIANTE_SELECTIONNEE.prixNormal);
+    barreEl.style.display = '';
+  } else if (promoOk) {
+    barreEl.textContent = formatPrix(VARIANTE_SELECTIONNEE.prixPromo);
+    barreEl.style.display = '';
+  } else {
+    barreEl.style.display = 'none';
+  }
+
+  var promoNoteEl = document.getElementById('fiche-promo-note');
+  if (promoNoteEl) {
+    promoNoteEl.style.display = promoOk ? 'block' : 'none';
+  }
+}
+
+// ============================================
+// PRODUITS SIMILAIRES
+// ============================================
+function afficherProduitsSimilaires(produitActuel) {
+  var section = document.getElementById('similaires-section');
+  var scroll = document.getElementById('similaires-scroll');
+  scroll.innerHTML = '';
+
+  var autres = [];
+  for (var i = 0; i < PRODUITS.length; i++) {
+    if (String(PRODUITS[i].id) !== String(produitActuel.id)) {
+      autres.push(PRODUITS[i]);
+    }
+  }
+
+  for (var j = autres.length - 1; j > 0; j--) {
+    var k = Math.floor(Math.random() * (j + 1));
+    var tmp = autres[j]; autres[j] = autres[k]; autres[k] = tmp;
+  }
+
+  var selection = autres.slice(0, 8);
+  if (selection.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = 'block';
+
+  for (var s = 0; s < selection.length; s++) {
+    var p = selection[s];
+    if (!p.variantes || p.variantes.length === 0) continue;
+    var v0 = p.variantes[0];
+    var imgSrc = (p.photos && p.photos.length > 0) ? p.photos[0] : p.photo;
+
+    var card = document.createElement('div');
+    card.className = 'similaire-card';
+    card.onclick = (function(prod) {
+      return function() { ouvrirFicheProduit(prod); window.scrollTo(0,0); };
+    })(p);
+
+    card.innerHTML =
+      '<img src="' + imgSrc + '" alt="' + escHtml(p.nom) + '">' +
+      '<div class="similaire-card-info">' +
+        '<div class="similaire-card-nom">' + escHtml(p.nom) + '</div>' +
+        '<div class="similaire-card-prix">' + formatPrix(v0.prixPromo) + '</div>' +
+      '</div>';
+
+    scroll.appendChild(card);
+  }
+}
+
+// ============================================
+// TEMOIGNAGES CLIENTS - bandeau defilant, nom + photo + texte
+// ============================================
+function chargerTemoignages(produitId) {
+  appelerApiJsonp("getTemoignages", { produitId: produitId }, function(res) {
+    var liste = (res && res.ok) ? res.temoignages : [];
+    afficherTemoignagesTicker(liste);
+  });
+}
+
+function afficherTemoignagesTicker(liste) {
+  var section = document.getElementById('temoignages-section');
+  var track = document.getElementById('temoignages-track');
+  track.innerHTML = '';
+
+  if (!liste || liste.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+  section.style.display = 'block';
+
+  var doubleListe = liste.concat(liste);
+  var html = '';
+  for (var i = 0; i < doubleListe.length; i++) {
+    var t = doubleListe[i];
+    var photoHtml = t.photoURL
+      ? '<img class="temoin-ticker-photo" src="' + t.photoURL + '" onerror="this.style.opacity=0">'
+      : '<div class="temoin-ticker-photo"></div>';
+    html +=
+      '<div class="temoin-ticker-card">' +
+        '<div class="temoin-ticker-header">' +
+          photoHtml +
+          '<div>' +
+            '<div class="temoin-ticker-nom">' + escHtml(t.nomClient) + '</div>' +
+            '<div class="temoin-ticker-stars">&#x2B50;&#xFE0F;&#x2B50;&#xFE0F;&#x2B50;&#xFE0F;&#x2B50;&#xFE0F;&#x2B50;&#xFE0F;</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="temoin-ticker-texte">' + escHtml(t.texte) + '</div>' +
+      '</div>';
+  }
+  track.innerHTML = html;
+}
+
+// ============================================
+// SUSPENSION BOUTIQUE - catalogue visible, bouton Commander desactive
+// ============================================
+function appliquerEtatSuspension() {
+  var btn = document.getElementById('cod-open-btn');
+  var stickyBtn = document.querySelector('.sticky-cta-btn');
+  if (!BOUTIQUE_SUSPENDUE) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Commander Maintenant'; btn.classList.add('cod-vibrate'); }
+    if (stickyBtn) { stickyBtn.disabled = false; stickyBtn.textContent = 'Commander'; }
+    return;
+  }
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Commandes temporairement fermees';
+    btn.classList.remove('cod-vibrate');
+    btn.style.background = '#999';
+    btn.style.cursor = 'not-allowed';
+  }
+  if (stickyBtn) {
+    stickyBtn.disabled = true;
+    stickyBtn.textContent = 'Indisponible';
+    stickyBtn.style.background = '#999';
+    stickyBtn.style.cursor = 'not-allowed';
+  }
+}
+
+// ============================================
+// FAQ ACCORDEON
+// ============================================
+function afficherFAQ() {
+  var list = document.getElementById('faq-list');
+  list.innerHTML = '';
+
+  for (var i = 0; i < FAQ_ITEMS.length; i++) {
+    var item = FAQ_ITEMS[i];
+    var div = document.createElement('div');
+    div.className = 'faq-item' + (i === 0 ? ' open' : '');
+
+    div.innerHTML =
+      '<div class="faq-question">' +
+        '<span>' + escHtml(item.q) + '</span>' +
+        '<svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>' +
+      '</div>' +
+      '<div class="faq-reponse"><div class="faq-reponse-inner">' + escHtml(item.r) + '</div></div>';
+
+    div.querySelector('.faq-question').onclick = (function(el) {
+      return function() { el.classList.toggle('open'); };
+    })(div);
+
+    list.appendChild(div);
+  }
+}
+
+// ============================================
+// MODAL COD
+// ============================================
+function ouvrirModalCOD() {
+  if (BOUTIQUE_SUSPENDUE) return;
+  document.getElementById('cod-modal').style.display = 'flex';
+
+  var promoDejaActive = promoEstActive();
+  var produitOk = produitEligiblePromo(PRODUIT_ACTUEL.id);
+
+  if (!promoDejaActive && produitOk) {
+    afficherEcranPromoWhatsapp();
+  } else {
+    afficherFormulaireCOD();
+  }
+}
+
+function afficherEcranPromoWhatsapp() {
+  document.getElementById('cod-promo-screen').style.display = 'block';
+  document.getElementById('cod-form-screen').style.display = 'none';
+}
+
+function rejoindreGroupeWhatsapp() {
+  window.open(PROMO_LIEN_WHATSAPP, '_blank');
+  activerPromoWhatsapp();
+  afficherFormulaireCOD();
+}
+
+function continuerSansPromo() {
+  afficherFormulaireCOD();
+}
+
+function afficherFormulaireCOD() {
+  document.getElementById('cod-promo-screen').style.display = 'none';
+  document.getElementById('cod-form-screen').style.display = 'block';
+
+  var promoBandeauEl = document.getElementById('cod-promo-bandeau');
+  if (promoBandeauEl) {
+    promoBandeauEl.style.display = (promoEstActive() && produitEligiblePromo(PRODUIT_ACTUEL.id)) ? 'block' : 'none';
+  }
+
+  var variantsDiv = document.getElementById('cod-variants');
+  variantsDiv.innerHTML = '';
+
+  if (PRODUIT_ACTUEL.variantes.length > 1) {
+    for (var i = 0; i < PRODUIT_ACTUEL.variantes.length; i++) {
+      var v = PRODUIT_ACTUEL.variantes[i];
+      var label = document.createElement('label');
+      label.className = 'cod-variant-option' + (i === 0 ? ' selected' : '');
+
+      var radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = 'cod_variant';
+      radio.value = i;
+      if (i === 0) radio.checked = true;
+      radio.addEventListener('change', (function(idx, lbl) {
+        return function() {
+          document.querySelectorAll('#cod-variants .cod-variant-option').forEach(function(el) {
+            el.classList.remove('selected');
+          });
+          lbl.classList.add('selected');
+          VARIANTE_SELECTIONNEE = PRODUIT_ACTUEL.variantes[idx];
+          majResumeCommande();
+        };
+      })(i, label));
+
+      var span = document.createElement('span');
+      span.style.display = 'flex';
+      span.style.width = '100%';
+      span.style.justifyContent = 'space-between';
+      span.innerHTML =
+        '<span class="cod-variant-name">' + escHtml(v.nom) + '</span>' +
+        '<span class="cod-variant-price">' + formatPrix(v.prixPromo) + '</span>';
+
+      label.appendChild(radio);
+      label.appendChild(span);
+      variantsDiv.appendChild(label);
+    }
+    VARIANTE_SELECTIONNEE = PRODUIT_ACTUEL.variantes[0];
+  }
+
+  majResumeCommande();
+
+  // Pixel FB: InitiateCheckout
+  var eventId = 'ic_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+  fbq('track', 'InitiateCheckout', {
+    content_name: PRODUIT_ACTUEL.nom,
+    content_ids: [PRODUIT_ACTUEL.id],
+    value: parseFloat(VARIANTE_SELECTIONNEE.prixPromo) || 0,
+    currency: 'XOF'
+  }, { eventID: eventId });
+}
+
+function fermerModalCOD() {
+  document.getElementById('cod-modal').style.display = 'none';
+}
+
+function majResumeCommande() {
+  document.getElementById('cod-summary-name').textContent = PRODUIT_ACTUEL.nom + ' - ' + VARIANTE_SELECTIONNEE.nom;
+  var prixFinal = prixApresPromo(PRODUIT_ACTUEL.id, VARIANTE_SELECTIONNEE.prixPromo);
+  document.getElementById('cod-summary-total').textContent = formatPrix(prixFinal);
+}
+
+// ============================================
+// FBP / FBC - lecture des cookies Facebook pour la CAPI
+// ============================================
+function getCookieFB(nom) {
+  var match = document.cookie.match(new RegExp('(^| )' + nom + '=([^;]+)'));
+  return match ? match[2] : '';
+}
+
+function construireFbcDepuisFbclid() {
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var fbclid = params.get('fbclid');
+    if (!fbclid) return '';
+    return 'fb.1.' + Date.now() + '.' + fbclid;
+  } catch (e) {
+    return '';
+  }
+}
+
+// ============================================
+// VALIDATION TELEPHONE - 10 chiffres par defaut (Cote d'Ivoire, sans
+// indicatif). Si le client est dans un autre pays, il doit ajouter
+// l'indicatif de son pays devant son numero (225/221/223/237 geres).
+// Retourne un objet {valide, message} pour donner un retour precis
+// selon le cas (ex: numero incomplet avec indicatif CI detecte).
+// ============================================
+var INDICATIFS_PAYS = {
+  "225": 10, // Cote d'Ivoire : 225 + 10 = 13 chiffres au total
+  "221": 9,  // Senegal : 221 + 9 = 12 chiffres au total
+  "223": 8,  // Mali : 223 + 8 = 11 chiffres au total
+  "237": 9   // Cameroun : 237 + 9 = 12 chiffres au total
+};
+
+function verifierTelephone(tel) {
+  var chiffres = String(tel).replace(/\D/g, '');
+
+  // Par defaut : 10 chiffres, sans indicatif (Cote d'Ivoire)
+  if (chiffres.length === 10) return { valide: true };
+
+  // Indicatif Cote d'Ivoire detecte mais mauvaise longueur : message specifique
+  if (chiffres.indexOf('225') === 0) {    return { valide: false, message: 'Numero incomplet. Avec l\'indicatif 225, il faut 10 chiffres apres (13 au total).' };
+  }
+
+  // Autres indicatifs connus : verifie la longueur exacte pour ce pays
+  for (var indicatif in INDICATIFS_PAYS) {
+    if (indicatif === '225') continue; // deja traite au-dessus
+    if (chiffres.indexOf(indicatif) === 0) {
+      var longueurAttendue = indicatif.length + INDICATIFS_PAYS[indicatif];
+      if (chiffres.length === longueurAttendue) return { valide: true };
+      return { valide: false, message: 'Numero incomplet ou incorrect pour l\'indicatif ' + indicatif + '.' };
+    }
+  }
+
+  // Aucun format reconnu
+  return { valide: false, message: 'Numero incorrect. Si vous etes dans un autre pays, ajoutez l\'indicatif de votre pays devant votre numero.' };
+}
+
+// ============================================
+// SOUMISSION COMMANDE
+// ============================================
+function codSubmitOrder() {
+  var nom = document.getElementById('cod-nom').value.trim();
+  var ville = document.getElementById('cod-ville').value.trim();
+  var adresse = document.getElementById('cod-adresse').value.trim();
+  var tel1 = document.getElementById('cod-tel1').value.trim();
+  var tel2 = document.getElementById('cod-tel2').value.trim();
+  var note = document.getElementById('cod-note').value.trim();
+  var statusEl = document.getElementById('cod-status');
+  var submitBtn = document.getElementById('cod-submit-btn');
+
+  if (!nom || !ville || !adresse || !tel1) {
+    showStatus(statusEl, 'error', 'Veuillez remplir tous les champs obligatoires (*)');
+    return;
+  }
+
+  var checkTel1 = verifierTelephone(tel1);
+  if (!checkTel1.valide) {
+    showStatus(statusEl, 'error', checkTel1.message);
+    return;
+  }
+
+  if (tel2) {
+    var checkTel2 = verifierTelephone(tel2);
+    if (!checkTel2.valide) {
+      showStatus(statusEl, 'error', 'Deuxieme numero : ' + checkTel2.message);
+      return;
+    }
+  }
+
+  var noteComplete = note;
+  if (tel2) {
+    noteComplete = 'Tel2: ' + tel2 + (note ? '\n' + note : '');
+  }
+
+  submitBtn.disabled = true;
+  showStatus(statusEl, 'loading', 'Envoi en cours...');
+
+  EVENT_ID_ACHAT = 'pur_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+
+  var prixFinalCommande = prixApresPromo(PRODUIT_ACTUEL.id, VARIANTE_SELECTIONNEE.prixPromo);
+
+  var noteAvecPromo = noteComplete;
+  if (promoEstActive() && produitEligiblePromo(PRODUIT_ACTUEL.id)) {
+    noteAvecPromo = '[PROMO WHATSAPP -' + PROMO_MONTANT + ' FCFA] ' + noteComplete;
+  }
+
+  var payload = {
+    sessionId: LIVE_SESSION_ID,
+    produitId: String(PRODUIT_ACTUEL.id),
+    nom: nom,
+    tel1: tel1,
+    tel2: tel2,
+    ville: ville,
+    adresse: adresse,
+    produit: PRODUIT_ACTUEL.nom,
+    variante: VARIANTE_SELECTIONNEE.nom,
+    prix: prixFinalCommande,
+    qte: 1,
+    note: noteAvecPromo,
+    eventId: EVENT_ID_ACHAT,
+    fbp: getCookieFB('_fbp'),
+    fbc: getCookieFB('_fbc') || construireFbcDepuisFbclid()
+  };
+
+  appelerApiPost(payload, function(res) {
+    if (res && res.ok) {
+      showStatus(statusEl, 'success', 'Commande confirmee ! Nous vous contacterons bientot. Merci ' + nom.split(' ')[0] + ' !');
+
+      fbq('track', 'Purchase', {
+        content_name: PRODUIT_ACTUEL.nom,
+        content_ids: [PRODUIT_ACTUEL.id],
+        value: parseFloat(VARIANTE_SELECTIONNEE.prixPromo) || 0,
+        currency: 'XOF'
+      }, { eventID: EVENT_ID_ACHAT });
+
+      consommerPromoWhatsapp();
+
+      document.getElementById('cod-nom').value = '';
+      document.getElementById('cod-ville').value = '';
+      document.getElementById('cod-adresse').value = '';
+      document.getElementById('cod-tel1').value = '';
+      document.getElementById('cod-tel2').value = '';
+      document.getElementById('cod-note').value = '';
+
+      setTimeout(function() {
+        fermerModalCOD();
+      }, 3000);
+    } else {
+      showStatus(statusEl, 'error', (res && res.message) || 'Erreur lors de l\'envoi. Veuillez reessayer.');
+    }
+    submitBtn.disabled = false;
+  });
+}
+
+function showStatus(el, type, msg) {
+  el.className = 'cod-status ' + type;
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ============================================
+// COMPTE A REBOURS (2h30, boucle infinie, localStorage)
+// ============================================
+function initCountdown() {
+  var container = document.getElementById('countdown-container');
+  container.innerHTML =
+    '<div class="countdown-box">' +
+      '<div class="countdown-text">Offre limitee ! Depechez-vous !</div>' +
+      '<div class="countdown-display">' +
+        '<div class="countdown-unit"><span class="countdown-value" id="cd-hours">00</span><span class="countdown-label">Heures</span></div>' +
+        '<div class="countdown-unit"><span class="countdown-value" id="cd-minutes">00</span><span class="countdown-label">Minutes</span></div>' +
+        '<div class="countdown-unit"><span class="countdown-value" id="cd-seconds">00</span><span class="countdown-label">Secondes</span></div>' +
+      '</div>' +
+    '</div>';
+
+  var durationSec = 150 * 60;
+  var storageKey = 'countdown_timer_end';
+
+  if (window._cdInterval) clearInterval(window._cdInterval);
+
+  var endTime = localStorage.getItem(storageKey);
+  if (!endTime) {
+    endTime = Date.now() + (durationSec * 1000);
+    localStorage.setItem(storageKey, endTime);
+  } else {
+    endTime = parseInt(endTime);
+  }
+
+  function updateTimer() {
+    var now = Date.now();
+    var remaining = Math.max(0, endTime - now);
+
+    if (remaining === 0) {
+      endTime = Date.now() + (durationSec * 1000);
+      localStorage.setItem(storageKey, endTime);
+    }
+
+    var totalSeconds = Math.floor(remaining / 1000);
+    var hours = Math.floor(totalSeconds / 3600);
+    var minutes = Math.floor((totalSeconds % 3600) / 60);
+    var seconds = totalSeconds % 60;
+
+    var hEl = document.getElementById('cd-hours');
+    var mEl = document.getElementById('cd-minutes');
+    var sEl = document.getElementById('cd-seconds');
+    if (hEl) hEl.textContent = String(hours).padStart(2, '0');
+    if (mEl) mEl.textContent = String(minutes).padStart(2, '0');
+    if (sEl) sEl.textContent = String(seconds).padStart(2, '0');
+  }
+
+  updateTimer();
+  window._cdInterval = setInterval(updateTimer, 1000);
+}
+
+// ============================================
+// WIDGET VISITEURS + STOCK EN DIRECT
+// ============================================
+function initLiveStats() {
+  var container = document.getElementById('live-stats-container');
+  container.innerHTML =
+    '<div class="live-stats-wrap">' +
+      '<div class="live-stats-grid">' +
+        '<div class="live-stats-label">Visiteurs en ligne actuellement</div>' +
+        '<div class="live-stats-value" id="ls-visitors">120</div>' +
+        '<div class="live-stats-label">En stock</div>' +
+        '<div class="live-stats-value" id="ls-stock">53</div>' +
+      '</div>' +
+    '</div>';
+
+  if (window._lsTimeout) clearTimeout(window._lsTimeout);
+
+  var visitorsMin = 120, visitorsMax = 350;
+  var stockMax = 53, stockMin = 7;
+  var currentStock = stockMax;
+  var currentVisitors = visitorsMin;
+  var intervalMin = 3000, intervalMax = 10000;
+
+  document.getElementById('ls-visitors').textContent = currentVisitors;
+  document.getElementById('ls-stock').textContent = currentStock;
+
+  function getRandomInterval() {
+    return Math.floor(Math.random() * (intervalMax - intervalMin + 1)) + intervalMin;
+  }
+  function getRandomVisitors() {
+    return Math.floor(Math.random() * (visitorsMax - visitorsMin + 1)) + visitorsMin;
+  }
+
+  function updateStats() {
+    var visitorsEl = document.getElementById('ls-visitors');
+    var stockEl = document.getElementById('ls-stock');
+    if (!visitorsEl || !stockEl) return;
+
+    var newVisitors = getRandomVisitors();
+    var diff = Math.abs(newVisitors - currentVisitors);
+
+    visitorsEl.classList.add('changing');
+    visitorsEl.textContent = newVisitors;
+    currentVisitors = newVisitors;
+    setTimeout(function() { visitorsEl.classList.remove('changing'); }, 300);
+
+    if (diff > 10) {
+      var decrease = Math.min(Math.floor(Math.random() * 4) + 1, currentStock - stockMin);
+      if (decrease > 0 && currentStock > stockMin) {
+        currentStock = Math.max(stockMin, currentStock - decrease);
+        stockEl.classList.add('changing');
+        stockEl.textContent = currentStock;
+        setTimeout(function() { stockEl.classList.remove('changing'); }, 300);
+      }
+    }
+
+    window._lsTimeout = setTimeout(updateStats, getRandomInterval());
+  }
+
+  window._lsTimeout = setTimeout(updateStats, getRandomInterval());
+}
+
+// ============================================
+// BANDEAU DE CONFIANCE - defilement pilote en JS pour caler precisement
+// la pause sur l'item special "Temoignages en bas", quelle que soit la
+// largeur reelle du texte selon l'ecran (le calcul CSS a pourcentages
+// fixes ne collait pas car les items ont des largeurs differentes).
+// Vitesse constante en pixels/seconde, boucle infinie via modulo sur
+// la largeur d'une moitie de piste (les items sont dupliques une fois).
+// ============================================
+function initTrustTicker() {
+  var ticker = document.querySelector('.trust-ticker');
+  var track = document.querySelector('.trust-ticker-track');
+  if (!ticker || !track) return;
+
+  var vitessePx = 40; // pixels par seconde
+  var dureePauseMs = 3000;
+
+  var largeurMoitie = track.scrollWidth / 2;
+  if (!largeurMoitie) return;
+
+  // Position centrale du premier item special (celui de la 1ere moitie),
+  // mesuree par rapport au debut de la piste
+  var specialEl = track.querySelector('.trust-ticker-item-special');
+  var centreSpecial = specialEl
+    ? specialEl.offsetLeft + (specialEl.offsetWidth / 2)
+    : largeurMoitie / 2;
+
+  var largeurViewport = ticker.clientWidth;
+  // Position de translation ou le centre de l'item special coincide avec
+  // le centre du viewport visible
+  var positionPause = centreSpecial - (largeurViewport / 2);
+  if (positionPause < 0) positionPause = 0;
+
+  var posActuelle = 0;
+  var enPause = false;
+  var dernierTs = null;
+
+  function frame(ts) {
+    if (dernierTs === null) dernierTs = ts;
+    var deltaS = (ts - dernierTs) / 1000;
+    dernierTs = ts;
+
+    if (!enPause) {
+      var posSuivante = posActuelle + (vitessePx * deltaS);
+
+      // Si on vient de depasser le point de pause dans ce frame, on s'y arrete
+      if (posActuelle < positionPause && posSuivante >= positionPause) {
+        posActuelle = positionPause;
+        track.style.transform = 'translateX(-' + posActuelle + 'px)';
+        enPause = true;
+        setTimeout(function() {
+          enPause = false;
+          dernierTs = null;
+        }, dureePauseMs);
+      } else {
+        posActuelle = posSuivante;
+        if (posActuelle >= largeurMoitie) {
+          posActuelle = posActuelle - largeurMoitie;
+        }
+        track.style.transform = 'translateX(-' + posActuelle + 'px)';
+      }
+    }
+
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+}
+
+// ============================================
+// INIT
+// ============================================
+document.getElementById('footer-year').textContent = new Date().getFullYear();
+chargerParametresPromo();
+chargerCatalogue();
+initTrustTicker();
+
+// Live view : premier ping immediat, puis toutes les 30 secondes
+// tant que cette page reste ouverte dans le navigateur du visiteur.
+// (Espace de 15s a 30s pour reduire la charge cote serveur avec
+// beaucoup de visiteurs simultanes - voir Site_livevue.gs qui utilise
+// desormais CacheService au lieu d'ecrire dans Sheets a chaque ping.)
+envoyerPing();
+setInterval(envoyerPing, 30000);
+</script>
+
+</body>
+</html>
