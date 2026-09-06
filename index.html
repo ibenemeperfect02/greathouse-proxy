@@ -680,12 +680,12 @@ fbq('track', 'PageView');
     font-size: 14px;
     font-weight: 700;
     color: var(--fg);
-    cursor: pointer;    background: #fff;
+    cursor: pointer;
+    background: #fff;
   }
   .faq-item.open .faq-question { background: #f7f7f7; }
   .faq-chevron { transition: transform 0.2s; flex-shrink: 0; margin-left: 10px; }
-  .faq-item.open .faq-chevron { transform: rotate(180deg); }
-  .faq-reponse {
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }  .faq-reponse {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.25s ease;
@@ -1036,7 +1036,8 @@ fbq('track', 'PageView');
 
     <div class="footer-block">
       <div class="footer-brand">Great House</div>
-      <div class="footer-text">Paiement à la livraison · Livraison gratuite · Satisfait ou remboursé</div>      <div class="footer-copy">&copy; <span id="footer-year"></span> Great House. Tous droits réservés.</div>
+      <div class="footer-text">Paiement à la livraison · Livraison gratuite · Satisfait ou remboursé</div>
+      <div class="footer-copy">&copy; <span id="footer-year"></span> Great House. Tous droits réservés.</div>
     </div>
 
   </div>
@@ -1052,8 +1053,7 @@ fbq('track', 'PageView');
   background: #000000;
   color: #ffffff;
   font-size: 17px;
-  font-weight: 700;
-  border: none;
+  font-weight: 700;  border: none;
   border-radius: 8px;
   cursor: pointer;
   letter-spacing: 0.5px;
@@ -1480,15 +1480,22 @@ var DEEP_LINK_PRODUIT_ID = (function() {
 // DEEP LINK PRODUIT - si l'URL pointe deja vers un produit precis, on
 // bascule immediatement vers la vue fiche (au lieu de laisser le gros
 // squelette du catalogue entier s'afficher inutilement le temps du
-// chargement), avec un indicateur de chargement leger a la place.
-// ouvrirFicheProduit() prendra le relais des que l'API repond.
+// chargement), avec un indicateur de chargement leger a la place. On
+// cache aussi la galerie/contenu (sinon l'image vide avec src="" affiche
+// une icone cassee visible en meme temps que le message, donnant une
+// impression de page cassee). ouvrirFicheProduit() les reaffiche des
+// que l'API repond.
 // ============================================
 if (DEEP_LINK_PRODUIT_ID) {
   document.getElementById('vue-catalogue').classList.remove('active');
   var vueFicheEl = document.getElementById('vue-fiche');
   vueFicheEl.classList.add('active');
+  var ficheGalerieEl = vueFicheEl.querySelector('.fiche-galerie');
+  var ficheContentEl = vueFicheEl.querySelector('.fiche-content');
+  if (ficheGalerieEl) ficheGalerieEl.style.display = 'none';
+  if (ficheContentEl) ficheContentEl.style.display = 'none';
   vueFicheEl.insertAdjacentHTML('afterbegin',
-    '<div id="fiche-chargement-initial" style="text-align:center;padding:60px 20px;color:#999;font-size:14px">Chargement du produit...</div>');
+    '<div id="fiche-chargement-initial" style="text-align:center;padding:80px 20px;color:#999;font-size:14px">Chargement du produit...</div>');
 }
 
 // ============================================
@@ -1628,11 +1635,11 @@ function chargerParametresPromo() {
     PROMO_ACTIVE_GLOBAL = !!p.promoActive;
     PROMO_MONTANT = parseFloat(p.promoMontant) || 1000;
     PROMO_LIEN_WHATSAPP = p.promoLien || "";
-    PROMO_DUREE_MS = (parseFloat(p.promoDureeMin) || 15) * 60 * 1000;    PROMO_PRODUITS_ELIGIBLES_RAW = p.promoProduits || "";
+    PROMO_DUREE_MS = (parseFloat(p.promoDureeMin) || 15) * 60 * 1000;
+    PROMO_PRODUITS_ELIGIBLES_RAW = p.promoProduits || "";
     PROMO_PRODUITS_ELIGIBLES = PROMO_PRODUITS_ELIGIBLES_RAW ? PROMO_PRODUITS_ELIGIBLES_RAW.split(",").map(function(s) { return s.trim(); }).filter(function(s) { return s; }) : [];
 
-    if (p.banniereTexte) {
-      var banniereEl = document.getElementById("promo-bar");
+    if (p.banniereTexte) {      var banniereEl = document.getElementById("promo-bar");
       if (banniereEl) banniereEl.textContent = p.banniereTexte;
     }
 
@@ -1854,10 +1861,15 @@ function ouvrirFicheProduit(produit) {
   PRODUIT_ACTUEL = produit;
   VARIANTE_SELECTIONNEE = produit.variantes[0];
 
-  // Retire le message "Chargement du produit..." s'il etait present
-  // (deep link direct vers un produit, voir DEEP_LINK_PRODUIT_ID plus haut)
+  // Retire le message "Chargement du produit..." et reaffiche la galerie/
+  // contenu s'ils avaient ete caches (deep link direct vers un produit,
+  // voir DEEP_LINK_PRODUIT_ID plus haut)
   var msgChargement = document.getElementById('fiche-chargement-initial');
   if (msgChargement) msgChargement.remove();
+  var ficheGalerieEl = document.querySelector('#vue-fiche .fiche-galerie');
+  var ficheContentEl = document.querySelector('#vue-fiche .fiche-content');
+  if (ficheGalerieEl) ficheGalerieEl.style.display = '';
+  if (ficheContentEl) ficheContentEl.style.display = '';
 
   var photos = (produit.photos && produit.photos.length > 0) ? produit.photos : [produit.photo];
   afficherGalerie(photos);
@@ -1933,6 +1945,10 @@ function retourCatalogue() {
   }
   var msgChargement = document.getElementById('fiche-chargement-initial');
   if (msgChargement) msgChargement.remove();
+  var ficheGalerieEl = document.querySelector('#vue-fiche .fiche-galerie');
+  var ficheContentEl = document.querySelector('#vue-fiche .fiche-content');
+  if (ficheGalerieEl) ficheGalerieEl.style.display = '';
+  if (ficheContentEl) ficheContentEl.style.display = '';
   try {
     window.history.replaceState({}, '', window.location.origin + '/');
   } catch (e) {}
@@ -2081,7 +2097,8 @@ function afficherTemoignagesTicker(liste) {
 // ============================================
 // SUSPENSION BOUTIQUE - catalogue visible, bouton Commander desactive
 // ============================================
-function appliquerEtatSuspension() {  var btn = document.getElementById('cod-open-btn');
+function appliquerEtatSuspension() {
+  var btn = document.getElementById('cod-open-btn');
   var stickyBtn = document.querySelector('.sticky-cta-btn');
   if (!BOUTIQUE_SUSPENDUE) {
     if (btn) { btn.disabled = false; btn.textContent = 'Commander Maintenant'; btn.classList.add('cod-vibrate'); }
@@ -2272,8 +2289,10 @@ function verifierTelephone(tel) {
   // Par defaut : 10 chiffres, sans indicatif (Cote d'Ivoire)
   if (chiffres.length === 10) return { valide: true };
 
-  // Indicatif Cote d'Ivoire detecte mais mauvaise longueur : message specifique
+  // Indicatif Cote d'Ivoire detecte : valide si 13 chiffres au total,
+  // sinon message specifique (numero incomplet avec cet indicatif)
   if (chiffres.indexOf('225') === 0) {
+    if (chiffres.length === 13) return { valide: true };
     return { valide: false, message: 'Numero incomplet. Avec l\'indicatif 225, il faut 10 chiffres apres (13 au total).' };
   }
 
